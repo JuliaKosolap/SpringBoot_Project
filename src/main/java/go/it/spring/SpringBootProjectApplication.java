@@ -4,13 +4,14 @@ import go.it.spring.entity.Note;
 import go.it.spring.services.NoteService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class SpringBootProjectApplication {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(SpringBootProjectApplication.class, args);
+		ConfigurableApplicationContext context = SpringApplication.run(SpringBootProjectApplication.class, args);
 		NoteService service = new NoteService();
 		Note note = new Note("Note1", "some content");
 		Note note2 = new Note("Note2", "some content");
@@ -23,6 +24,7 @@ public class SpringBootProjectApplication {
 		System.out.println(service.getById(addedNote2.getId()));
 		System.out.println(service.listAll());
 		service.deleteById(0);
+		context.close();
 	}
 
 }
