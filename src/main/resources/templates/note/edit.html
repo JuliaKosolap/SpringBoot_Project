@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Edit Note</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+</head>
+<body>
+<div align="center">
+    <h1>Edit Note</h1>
+    <form th:action="@{/note/save}" th:object="${note}" method="POST">
+        <label>Title:</label>
+        <input type="text" th:field="*{title}" /><br/>
+
+        <label>Content:</label>
+        <input type="text" th:field="*{content}" /><br/>
+
+        <td><button type="submit">Submit</button></td>
+        <input type="hidden" th:field="*{id}" />
+    </form>
+</div>
+</body>
+</html>

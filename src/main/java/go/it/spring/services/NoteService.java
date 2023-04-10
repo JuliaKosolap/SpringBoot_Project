@@ -2,6 +2,7 @@ package go.it.spring.services;
 
 import go.it.spring.entity.Note;
 import jakarta.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,7 +11,10 @@ import java.util.Random;
 
 @Service
 public class NoteService {
+
+
     private List<Note> noteList;
+
 
     public List<Note> listAll() {
         return noteList;

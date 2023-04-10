@@ -1,30 +1,32 @@
 package go.it.spring;
 
+import go.it.spring.controller.NoteController;
 import go.it.spring.entity.Note;
 import go.it.spring.services.NoteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @SpringBootApplication
-public class SpringBootProjectApplication {
+public class SpringBootProjectApplication implements CommandLineRunner {
+
+	@Autowired
+	private NoteService noteService;
 
 	public static void main(String[] args) {
-
-		ConfigurableApplicationContext context = SpringApplication.run(SpringBootProjectApplication.class, args);
-		NoteService service = new NoteService();
-		Note note = new Note("Note1", "some content");
-		Note note2 = new Note("Note2", "some content");
-		Note addedNote = service.add(note);
-		Note addedNote2 = service.add(note2);
-		System.out.println("New note id: " + addedNote.getId());
-		System.out.println("New note id: " + addedNote2.getId());
-		Note note3 = new Note(0, "Note3", "some new content");
-		service.update(note3);
-		System.out.println(service.getById(addedNote2.getId()));
-		System.out.println(service.listAll());
-		service.deleteById(0);
-		context.close();
+		SpringApplication.run(SpringBootProjectApplication.class, args);
 	}
 
+	@Override
+	public void run(String... args) throws Exception {
+		Note note = new Note("Note1", "some content");
+		Note note2 = new Note("Note2", "some content");
+		noteService.add(note);
+		noteService.add(note2);
+	}
 }
