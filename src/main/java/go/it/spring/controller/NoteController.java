@@ -45,7 +45,7 @@ public class NoteController {
     @PostMapping("/save")
     public ModelAndView editNote(@ModelAttribute("note") Note note, Model model) {
         noteService.update(note);
-        ModelAndView result = new ModelAndView("note/list");
+        ModelAndView result = new ModelAndView("redirect:/note/list");
         List<Note> notes = noteService.findAll();
         result.addObject("notes", notes);
         return result;
@@ -54,7 +54,7 @@ public class NoteController {
     @GetMapping("/delete")
     public ModelAndView delete(@RequestParam long id) {
         noteService.deleteById(id);
-        ModelAndView result = new ModelAndView("note/list");
+        ModelAndView result = new ModelAndView("redirect:/note/list");
         List<Note> notes = noteService.findAll();
         result.addObject("notes", notes);
         return result;
