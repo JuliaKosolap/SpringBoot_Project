@@ -1,6 +1,8 @@
 package go.it.spring.controller;
 
 import go.it.spring.entity.Note;
+import go.it.spring.mapper.NoteMapper;
+import go.it.spring.model.NoteDTO;
 import go.it.spring.services.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +16,20 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/note")
 public class NoteController {
-    @Autowired
-    private  NoteService noteService;
+
+    private final NoteService noteService;
+
+    @PostMapping
+    public NoteDTO create(@RequestBody NoteDTO dto) {
+        Note note = NoteMapper.from(dto);
+        note = noteService.create(note);
+        return NoteMapper.from(note);
+    }
 
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView result = new ModelAndView("note/list");
-        List<Note> notes = noteService.listAll();
+        List<Note> notes = noteService.findAll();
         result.addObject("notes", notes);
         return result;
     }
@@ -35,10 +44,9 @@ public class NoteController {
 
     @PostMapping("/save")
     public ModelAndView editNote(@ModelAttribute("note") Note note, Model model) {
-        //Note newNote = new Note(0, "Note1-updated", "some content");
         noteService.update(note);
         ModelAndView result = new ModelAndView("note/list");
-        List<Note> notes = noteService.listAll();
+        List<Note> notes = noteService.findAll();
         result.addObject("notes", notes);
         return result;
     }
@@ -47,7 +55,7 @@ public class NoteController {
     public ModelAndView delete(@RequestParam long id) {
         noteService.deleteById(id);
         ModelAndView result = new ModelAndView("note/list");
-        List<Note> notes = noteService.listAll();
+        List<Note> notes = noteService.findAll();
         result.addObject("notes", notes);
         return result;
     }

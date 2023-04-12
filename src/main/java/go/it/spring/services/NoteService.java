@@ -1,18 +1,24 @@
 package go.it.spring.services;
 
 import go.it.spring.entity.Note;
+import go.it.spring.repos.NoteRepository;
 import jakarta.annotation.PreDestroy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+@RequiredArgsConstructor
 @Service
 public class NoteService {
 
-
+    private final NoteRepository repository;
     private List<Note> noteList;
 
 
@@ -20,31 +26,20 @@ public class NoteService {
         return noteList;
     }
 
-    public Note add(Note note) {
-        boolean isIdExists = true;
-        Random random = new Random();
-        long randomId = 0;
-        if (noteList != null) {
-            while (isIdExists) {
-                randomId = random.nextLong();
-                isIdExists = checkIfIdExists(randomId);
-            }
-        } else {
-            noteList = new ArrayList<>();
+
+        public Note create(Note note) {
+            return repository.save(note);
         }
-        Note newNote = new Note(randomId, note.getTitle(), note.getContent());
-        noteList.add(newNote);
-        return newNote;
+
+    public List<Note> findAll() {
+        return StreamSupport.stream(repository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     public void deleteById(long id) {
-        boolean isIdExist = checkIfIdExists(id);
+        boolean isIdExist = repository.existsById(id);
         if (isIdExist) {
-            for (int i = 0; i < noteList.size(); i++) {
-                if (noteList.get(i).getId() == id) {
-                    noteList.remove(noteList.get(i));
-                }
-            }
+            repository.deleteById(id);
         } else {
             throw new IllegalArgumentException();
         }
@@ -53,14 +48,9 @@ public class NoteService {
 
     public void update(Note note) {
         long id = note.getId();
-        boolean isIdExist = checkIfIdExists(id);
+        boolean isIdExist = repository.existsById(id);
         if (isIdExist) {
-            for (int i = 0; i < noteList.size(); i++) {
-                if (noteList.get(i).getId() == id) {
-                    noteList.get(i).setTitle(note.getTitle());
-                    noteList.get(i).setContent(note.getContent());
-                }
-            }
+            repository.save(note);
         } else {
             throw new IllegalArgumentException();
         }
@@ -68,32 +58,13 @@ public class NoteService {
 
     public Note getById(long id) {
         Note note = null;
-        boolean isIdExist = checkIfIdExists(id);
+        boolean isIdExist = repository.existsById(id);
         if (isIdExist) {
-            for (int i = 0; i < noteList.size(); i++) {
-                if (noteList.get(i).getId() == id) {
-                    note = new Note(noteList.get(i).getId(), noteList.get(i).getTitle(), noteList.get(i).getContent());
-                }
-            }
+            note = repository.getReferenceById(id);
         } else {
             throw new IllegalArgumentException();
         }
         return note;
-    }
-
-    private boolean checkIfIdExists(long id) {
-        boolean isIdExist = false;
-        if (noteList != null) {
-
-            for (int i = 0; i < noteList.size(); i++) {
-                if (noteList.get(i).getId() == id) {
-                    isIdExist = true;
-                }
-            }
-        } else {
-            System.out.println("List of notes is empty");
-        }
-        return isIdExist;
     }
 
 }
