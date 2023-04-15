@@ -25,7 +25,7 @@ public class SpringBootProjectApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Flyway flyway = Flyway.configure().dataSource("jdbc:h2:./test4", "sa", null).load();
+		Flyway flyway = Flyway.configure().dataSource("jdbc:h2:./test5", "sa", null).load();
 		flyway.migrate();
 		Note note = new Note("Note1", "some content");
 		Note note2 = new Note("Note2", "some content");

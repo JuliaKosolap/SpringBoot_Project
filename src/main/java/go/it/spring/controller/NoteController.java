@@ -5,7 +5,6 @@ import go.it.spring.mapper.NoteMapper;
 import go.it.spring.model.NoteDTO;
 import go.it.spring.services.NoteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -59,4 +58,6 @@ public class NoteController {
         result.addObject("notes", notes);
         return result;
     }
+
+
 }
